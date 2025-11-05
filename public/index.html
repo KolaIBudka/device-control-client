@@ -135,6 +135,15 @@
             border-left: 3px solid #3498db;
         }
 
+        .account.admin {
+            border-left-color: #e74c3c;
+            background: #fff5f5;
+        }
+
+        .account.user {
+            border-left-color: #3498db;
+        }
+
         .error-message {
             background: #e74c3c;
             color: white;
@@ -145,7 +154,85 @@
             display: none;
         }
 
-        /* Dashboard */
+        /* User Access Denied Screen */
+        .access-denied-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .access-denied-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 50px 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .hack-message {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 3px solid #ff9ff3;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hack-message::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .hack-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hack-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        .logout-btn {
+            padding: 12px 30px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        /* Admin Dashboard */
         .dashboard-header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -172,6 +259,26 @@
         .user-info {
             color: #7f8c8d;
             font-size: 0.9em;
+        }
+
+        .user-role {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: 500;
+            text-transform: uppercase;
+            margin-left: 8px;
+        }
+
+        .role-admin {
+            background: #ffeaa7;
+            color: #e17055;
+        }
+
+        .role-user {
+            background: #dfe6e9;
+            color: #636e72;
         }
 
         .header-right {
@@ -208,22 +315,7 @@
             100% { opacity: 1; }
         }
 
-        .logout-btn {
-            padding: 8px 16px;
-            background: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: background 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background: #c0392b;
-        }
-
-        .dashboard-content {
+        .admin-dashboard-content {
             max-width: 1200px;
             margin: 0 auto;
             padding: 30px;
@@ -544,13 +636,13 @@
         }
 
         @media (max-width: 1024px) {
-            .dashboard-content {
+            .admin-dashboard-content {
                 grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 768px) {
-            .dashboard-content {
+            .admin-dashboard-content {
                 padding: 20px;
             }
             
@@ -561,6 +653,10 @@
             }
             
             .login-card {
+                padding: 30px 20px;
+            }
+            
+            .access-denied-card {
                 padding: 30px 20px;
             }
             
@@ -585,12 +681,12 @@
                 <form id="login-form">
                     <div class="input-group">
                         <label for="username">Username</label>
-                        <input type="text" id="username" value="admin" required>
+                        <input type="text" id="username" placeholder="Enter username" required>
                     </div>
                     
                     <div class="input-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" value="admin123" required>
+                        <input type="password" id="password" placeholder="Enter password" required>
                     </div>
                     
                     <button type="submit" class="login-btn">Sign In</button>
@@ -598,11 +694,11 @@
                 
                 <div class="demo-accounts">
                     <h3>Demo Accounts</h3>
-                    <div class="account">
-                        <strong>admin</strong> / admin123
+                    <div class="account admin">
+                        <strong>admin</strong> / admin123 <em>(Full access)</em>
                     </div>
-                    <div class="account">
-                        <strong>user1</strong> / user123
+                    <div class="account user">
+                        <strong>user1</strong> / user123 <em>(Limited access)</em>
                     </div>
                 </div>
                 
@@ -611,12 +707,28 @@
         </div>
     </div>
 
-    <!-- Dashboard -->
-    <div id="dashboard-screen" class="screen">
+    <!-- User Access Denied Screen -->
+    <div id="user-access-screen" class="screen">
+        <div class="access-denied-container">
+            <div class="access-denied-card">
+                <div class="hack-message">
+                    <div class="hack-title">🚨 ВНИМАНИЕ! 🚨</div>
+                    <div class="hack-text">
+                        Вы взломали самый сложный девайс в мире!<br>
+                        Позовите администратора и он закончит начатое.
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="client.handleLogout()">Выйти из системы</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard-screen" class="screen">
         <header class="dashboard-header">
             <div class="header-content">
                 <div class="header-left">
-                    <h1>Device Control Panel</h1>
+                    <h1>Device Control Panel <span class="user-role role-admin" id="user-role">ADMIN</span></h1>
                     <div class="user-info">
                         Welcome, <span id="current-user">User</span>
                     </div>
@@ -631,7 +743,7 @@
             </div>
         </header>
 
-        <div class="dashboard-content">
+        <div class="admin-dashboard-content">
             <!-- Devices Panel -->
             <div class="panel">
                 <div class="panel-header">
@@ -660,14 +772,14 @@
                         </div>
                         
                         <button class="start-btn" id="start-command" disabled>
-                            Send START Command
+                            🚀 Send START Command
                         </button>
                     </div>
                     
                     <div class="control-section">
                         <h3>Quick Actions</h3>
                         <button class="start-btn" id="start-all-btn" style="background: #f39c12;" disabled>
-                            Start All Devices
+                            ⚡ Start All Devices
                         </button>
                     </div>
                 </div>
@@ -682,8 +794,8 @@
                 <div class="panel-content">
                     <div class="notifications-list" id="notifications-list">
                         <div class="notification info">
-                            <div class="notification-title">Welcome</div>
-                            <div class="notification-message">Ready to connect to devices</div>
+                            <div class="notification-title">Welcome, Administrator</div>
+                            <div class="notification-message">You have full access to device management</div>
                             <div class="notification-time" id="current-time"></div>
                         </div>
                     </div>
@@ -784,7 +896,14 @@
 
                     if (data.success) {
                         this.currentUser = data.user;
-                        this.showDashboard();
+                        
+                        // Show different screens based on user role
+                        if (this.currentUser.role === 'admin') {
+                            this.showAdminDashboard();
+                        } else {
+                            this.showUserAccessScreen();
+                        }
+                        
                         this.connectToServer();
                     } else {
                         this.showLoginError(data.message);
@@ -809,10 +928,19 @@
                 }, 5000);
             }
 
-            showDashboard() {
+            showAdminDashboard() {
                 document.getElementById('login-screen').classList.remove('active');
-                document.getElementById('dashboard-screen').classList.add('active');
+                document.getElementById('user-access-screen').classList.remove('active');
+                document.getElementById('admin-dashboard-screen').classList.add('active');
+                
                 document.getElementById('current-user').textContent = this.currentUser.username;
+                document.getElementById('user-role').textContent = this.currentUser.role.toUpperCase();
+            }
+
+            showUserAccessScreen() {
+                document.getElementById('login-screen').classList.remove('active');
+                document.getElementById('admin-dashboard-screen').classList.remove('active');
+                document.getElementById('user-access-screen').classList.add('active');
             }
 
             connectToServer() {
@@ -997,6 +1125,13 @@
                     return;
                 }
 
+                // Only admin can send commands (this is already checked on server, but we check client-side too)
+                if (this.currentUser.role !== 'admin') {
+                    this.addTerminalLog('Error: Access denied. Admin privileges required.', 'error');
+                    this.addNotification('Access Denied', 'You need admin privileges to send commands', 'error');
+                    return;
+                }
+
                 this.addTerminalLog(`Sending START command to device: ${this.selectedDevice.deviceId}`, 'command');
                 this.socket.emit('start-command', {
                     deviceId: this.selectedDevice.deviceId,
@@ -1007,6 +1142,13 @@
             sendStartAllCommand() {
                 if (!this.socket || this.connectedDevices.length === 0) {
                     this.addTerminalLog('Error: No devices available or not connected to server', 'error');
+                    return;
+                }
+
+                // Only admin can send commands
+                if (this.currentUser.role !== 'admin') {
+                    this.addTerminalLog('Error: Access denied. Admin privileges required.', 'error');
+                    this.addNotification('Access Denied', 'You need admin privileges to send commands', 'error');
                     return;
                 }
 
@@ -1058,7 +1200,7 @@
 
             clearNotifications() {
                 const notificationsList = document.getElementById('notifications-list');
-                notificationsList.innerHTML = '<div class="notification info"><div class="notification-title">Welcome</div><div class="notification-message">Notifications cleared</div><div class="notification-time">' + new Date().toLocaleTimeString() + '</div></div>';
+                notificationsList.innerHTML = '<div class="notification info"><div class="notification-title">Welcome, Administrator</div><div class="notification-message">You have full access to device management</div><div class="notification-time">' + new Date().toLocaleTimeString() + '</div></div>';
             }
 
             toggleTerminal() {
@@ -1085,8 +1227,11 @@
                 this.connectedDevices = [];
                 this.selectedDevice = null;
                 
-                document.getElementById('dashboard-screen').classList.remove('active');
+                // Show login screen
+                document.getElementById('admin-dashboard-screen').classList.remove('active');
+                document.getElementById('user-access-screen').classList.remove('active');
                 document.getElementById('login-screen').classList.add('active');
+                
                 document.getElementById('login-form').reset();
                 
                 const loginError = document.getElementById('login-error');
