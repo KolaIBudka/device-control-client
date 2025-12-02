@@ -831,7 +831,7 @@
                 this.connectedDevices = [];
                 this.selectedDevice = null;
                 this.terminalPaused = false;
-                this.serverUrl = 'http://localhost:3000';
+                this.serverUrl = 'http://144.31.73.100:4546';
                 
                 this.initializeEventListeners();
                 this.updateCurrentTime();
@@ -884,7 +884,7 @@
 
                 try {
                     // Direct authentication with main server
-                    const response = await fetch('http://localhost:3000/api/login', {
+                    const response = await fetch('http://144.31.73.100:4546/api/login', {
                         method: 'POST',
                         headers: { 
                             'Content-Type': 'application/json'
